@@ -120,6 +120,11 @@ const DamageAnalyzer: React.FC = () => {
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Vehicle Damage Analyzer</h1>
           <p className="text-gray-600">Upload before and after images to detect and analyze damage</p>
         </div>
+          <div className="mb-6 text-center">
+        <p className="text-sm text-gray-600 bg-yellow-100 border border-yellow-300 px-4 py-2 rounded-lg">
+          ⏳ The server is hosted on Render free tier — it may take up to <span className="font-semibold">1 minute</span> to wake up.
+        </p>
+      </div>
 
         <div className="bg-white shadow-2xl rounded-2xl p-8 mb-8">
           <div className="grid md:grid-cols-2 gap-6 mb-8">

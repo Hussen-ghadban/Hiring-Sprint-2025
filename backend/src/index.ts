@@ -11,11 +11,13 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: "https://hiring-sprint-2025.vercel.app",
   methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type"],
 }));
 
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('API is working!');
+});
 app.use('/analyze', analyzeRouter);
 
 app.listen(PORT, () => {
