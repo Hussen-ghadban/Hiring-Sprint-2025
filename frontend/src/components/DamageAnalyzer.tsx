@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import {
   Upload,
@@ -8,79 +8,9 @@ import {
   FileImage,
   DollarSign,
 } from "lucide-react";
-import type { ImageWithDamageProps ,Report} from "../types/damageTypes";
+import type { Report} from "../types/damageTypes";
+import { ImageWithDamage } from "./ImageWithDamage";
 
-const ImageWithDamage: React.FC<ImageWithDamageProps> = ({ src, damages = [] }) => {
-  const imgRef = useRef<HTMLImageElement>(null);
-  const [imgSize, setImgSize] = useState({ width: 0, height: 0 });
-  const [naturalSize, setNaturalSize] = useState({ width: 1, height: 1 });
-
-  const updateDimensions = () => {
-    if (imgRef.current) {
-      setImgSize({
-        width: imgRef.current.clientWidth,
-        height: imgRef.current.clientHeight,
-      });
-      setNaturalSize({
-        width: imgRef.current.naturalWidth,
-        height: imgRef.current.naturalHeight,
-      });
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
-
-  return (
-    <div className="relative inline-block">
-      <img
-        ref={imgRef}
-        src={src}
-        alt="Vehicle"
-        onLoad={updateDimensions}
-        className="block max-w-full h-auto rounded-xl shadow-md"
-      />
-
-      {imgSize.width > 0 &&
-        damages.map((dmg, idx) => {
-          const scaleX = imgSize.width / naturalSize.width;
-          const scaleY = imgSize.height / naturalSize.height;
-
-          // Convert rectangle to points if no points array
-          const points = dmg.points ?? (dmg.x !== undefined && dmg.y !== undefined && dmg.width && dmg.height
-            ? [
-                { x: dmg.x, y: dmg.y },
-                { x: dmg.x + dmg.width, y: dmg.y },
-                { x: dmg.x + dmg.width, y: dmg.y + dmg.height },
-                { x: dmg.x, y: dmg.y + dmg.height },
-              ]
-            : undefined);
-
-          if (!points) return null;
-
-          const pointsString = points.map(p => `${p.x * scaleX},${p.y * scaleY}`).join(" ");
-
-          return (
-            <svg
-              key={idx}
-              className="absolute inset-0 w-full h-full pointer-events-none"
-            >
-              <polygon
-                points={pointsString}
-                fill="rgba(239, 68, 68, 0.2)"
-                stroke="red"
-                strokeWidth={2}
-              >
-                <title>{dmg.class}</title>
-              </polygon>
-            </svg>
-          );
-        })}
-    </div>
-  );
-};
 
 const DamageAnalyzer: React.FC = () => {
   const [pickupFile, setPickupFile] = useState<File | null>(null);
